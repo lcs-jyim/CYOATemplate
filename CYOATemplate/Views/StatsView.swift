@@ -10,15 +10,21 @@ import SwiftUI
 struct StatsView: View {
     
     // MARK: Stored properties
-    
+    @Environment(BookStore.self) var book
     // Whether this view is showing in the sheet right now
     @Binding var showing: Bool
-    
+    let viewModel: PageViewModel
+
     // MARK: Computed properties
     var body: some View {
         NavigationStack {
             VStack {
-                Text("A total of x pages out of y pages overall have been visited in this story.")
+                Text("A total of \(viewModel.totalPagesRead.numberOfPageRead) pages out of 32 pages overall have been visited in this story.")
+                if(viewModel.totalPagesRead.numberOfEndingRead == 8) {
+                    Text("You've visited all 8 endings!")
+                } else {
+                    Text("You've visited \(viewModel.totalPagesRead.numberOfEndingRead) endings, there are more to discover.")
+                }
             }
             .padding()
             .navigationTitle("Statistics")
@@ -42,5 +48,5 @@ struct StatsView: View {
 }
 
 #Preview {
-    StatsView(showing: Binding.constant(true))
+    StatsView(showing: Binding.constant(true), viewModel: PageViewModel(book: BookStore()))
 }

@@ -15,6 +15,7 @@ struct Page: Identifiable, Codable {
     var image: String?
     var endingContext: String?
     var endingTypeId: Int?
+    var ifRead: Bool
     
     // When decoding and encoding from JSON, translate snake_case
     // column names into camelCase
@@ -24,6 +25,7 @@ struct Page: Identifiable, Codable {
         case image
         case endingContext = "ending_context"
         case endingTypeId = "ending_type_id"
+        case ifRead
     }
     
     // MARK: Computed properties
