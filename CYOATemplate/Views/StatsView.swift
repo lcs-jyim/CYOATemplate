@@ -19,7 +19,7 @@ struct StatsView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("A total of \(viewModel.totalPagesRead.numberOfPageRead) pages out of 114 pages overall have been visited in this story.")
+                Text("A total of \(viewModel.totalPagesRead.numberOfPageRead) pages out of 32 pages overall have been visited in this story.")
                 if(viewModel.totalPagesRead.numberOfEndingRead == 8) {
                     Text("You've visited all 8 endings!")
                 } else {
