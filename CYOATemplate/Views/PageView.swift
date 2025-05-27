@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PageView: View {
-
+    
     // MARK: Stored properties
-
+    
     // Access the book state through the environment
     @Environment(BookStore.self) var book
     
@@ -24,17 +24,16 @@ struct PageView: View {
     
     // MARK: Computed properties
     var body: some View {
-        
         ScrollView {
             VStack(spacing: 10) {
-                                          
+                
                 // Has the page loaded yet?
                 if let page = viewModel.page {
                     
                     // DEBUG
                     let _ = print("Text for this page is:\n\n\(page.narrative)\n\n")
                     let _ = print("Image for this page is:\n\n\(page.image ?? "(no image for this page)")\n\n")
-
+                    
                     Text(
                         try! AttributedString(
                             markdown: page.narrative,
@@ -43,7 +42,7 @@ struct PageView: View {
                             )
                         )
                     )
-                        .font(.title2)
+                    .font(.title2)
                     
                     if let image = page.image {
                         
@@ -52,13 +51,13 @@ struct PageView: View {
                             .scaledToFit()
                             .border(.black, width: 1)
                             .padding(.vertical, 10)
-
+                        
                     }
-
+                    
                     Divider()
                     
                     if page.isAnEndingOfTheStory {
-
+                        
                         // Page is an ending, so tell the user,
                         // and allow book to be re-started
                         Text("The End")
@@ -66,7 +65,7 @@ struct PageView: View {
                             .onTapGesture {
                                 book.showCoverPage()
                             }
-
+                        
                     } else {
                         
                         // Page is not an ending, so show available edges
@@ -78,7 +77,7 @@ struct PageView: View {
                     
                     
                     Spacer()
-
+                    
                 } else {
                     
                     // Page still loading from database
@@ -88,10 +87,18 @@ struct PageView: View {
             }
             .padding()
         }
-
+        .onAppear {
+            if (viewModel.page?.ifRead == false){
+                viewModel.page?.ifRead.toggle()
+                if (viewModel.page!.isAnEndingOfTheStory) {
+                    viewModel.addEnding()
+                } else {
+                    viewModel.addPage()
+                }
+            }
+        }
     }
 }
-
 #Preview {
     PageView(
         viewModel: PageViewModel(book: BookStore())
