@@ -70,7 +70,7 @@ struct PageView: View {
                         
                         // Page is not an ending, so show available edges
                         EdgesView(
-                            viewModel: EdgesViewModel(book: book)
+                            viewModel: EdgesViewModel(book: book), pageViewModel: PageViewModel(book: book)
                         )
                         
                     }
@@ -87,20 +87,11 @@ struct PageView: View {
             }
             .padding()
         }
-        .onAppear {
-            if (viewModel.page?.ifRead == false){
-                viewModel.page?.ifRead.toggle()
-                if (viewModel.page!.isAnEndingOfTheStory) {
-                    viewModel.addEnding()
-                } else {
-                    viewModel.addPage()
-                }
-            }
-        }
+        
     }
 }
-#Preview {
-    PageView(
-        viewModel: PageViewModel(book: BookStore())
-    )
-}
+//#Preview {
+//    PageView(
+//        viewModel: PageViewModel(book: BookStore())
+//    )
+//}

@@ -21,12 +21,7 @@ struct EdgesView: View {
     // (which is fed to the initializer of EdgesViewModel)
     // then EdgesView will be re-loaded, updating the text
     let viewModel: EdgesViewModel
-    
-    // Whether the challenge/quiz view is being shown right now
-    @State private var showingQuizView = false
-    
-    // Whether the quiz question was answered correctly
-    @State private var quizResult: QuizResult = .quizNotActive
+    let pageViewModel: PageViewModel
 
     // MARK: Computed properties
     var body: some View {
@@ -66,30 +61,18 @@ struct EdgesView: View {
                                 .multilineTextAlignment(.trailing)
                         }
                         .onTapGesture {
-                            
+                            if (pageViewModel.page?.ifRead != false){
+                                pageViewModel.page?.ifRead.toggle()
+                                if (pageViewModel.page!.isAnEndingOfTheStory) {
+                                    pageViewModel.addEnding()
+                                }
+                                pageViewModel.addPage()
+                            }
                             // DEBUG
                             print("Current page number is: \(book.currentPageId!)")
                             print("==== about to change page ====")
                             
-                            if edge.prompt.contains("Turn to the next page") {
-                                
-                                if quizResult == .quizNotActive ||
-                                    quizResult == .wasNotCorrect {
-                                    showingQuizView = true
-                                } else {
-                                    
-                                    // Question answered correctly, allow reader to move on
-                                    book.read(edge.toPage)
-
-                                }
-                                
-                            } else {
-
-                                // Move to page edge connects to
-                                // (No prompt for quiz on pages that have multiple options)
-                                book.read(edge.toPage)
-
-                            }
+                            book.read(edge.toPage)
                             
                             // DEBUG
                             print("==== changed page ====")
@@ -105,14 +88,6 @@ struct EdgesView: View {
             }
                 
         }
-        // Show the quiz view
-        .sheet(isPresented: $showingQuizView) {
-            VocabularyQuizView(
-                showing: $showingQuizView,
-                result: $quizResult
-            )
-            .presentationDetents([.medium, .fraction(0.33)])
-        }
 
 
     }
@@ -120,6 +95,6 @@ struct EdgesView: View {
 
 #Preview {
     EdgesView(
-        viewModel: EdgesViewModel(book: BookStore())
+        viewModel: EdgesViewModel(book: BookStore()), pageViewModel: PageViewModel(book: BookStore())
     )
 }
