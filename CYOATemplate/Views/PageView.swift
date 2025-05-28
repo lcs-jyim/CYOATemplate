@@ -71,7 +71,7 @@ struct PageView: View {
                         
                         // Page is not an ending, so show available edges
                         EdgesView(
-                            viewModel: EdgesViewModel(book: book)
+                            viewModel: EdgesViewModel(book: book), pageViewModel: PageViewModel(book: book)
                         )
                         
                     }
@@ -91,8 +91,8 @@ struct PageView: View {
         
     }
 }
-#Preview {
-    PageView(
-        viewModel: PageViewModel(book: BookStore())
-    )
-}
+//#Preview {
+//    PageView(
+//        viewModel: PageViewModel(book: BookStore())
+//    )
+//}
