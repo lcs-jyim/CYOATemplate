@@ -30,6 +30,7 @@ struct PageView: View {
                 // Has the page loaded yet?
                 if let page = viewModel.page {
                     
+
                     // DEBUG
                     let _ = print("Text for this page is:\n\n\(page.narrative)\n\n")
                     let _ = print("Image for this page is:\n\n\(page.image ?? "(no image for this page)")\n\n")
@@ -87,16 +88,7 @@ struct PageView: View {
             }
             .padding()
         }
-        .onAppear {
-            if (viewModel.page?.ifRead == false){
-                viewModel.page?.ifRead.toggle()
-                if (viewModel.page!.isAnEndingOfTheStory) {
-                    viewModel.addEnding()
-                } else {
-                    viewModel.addPage()
-                }
-            }
-        }
+        
     }
 }
 #Preview {
